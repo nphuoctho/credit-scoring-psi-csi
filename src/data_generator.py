@@ -76,14 +76,19 @@ def generate_base(n=150_000, seed=42, prevalence=0.067):
     # --- true log-odds of default: linear drivers + a non-linearity ---
     # The step/interaction terms are what gives the tree challenger a real edge
     # over the linear champion (it captures them more fully).
+    zutil, zdebt, zinc = _zscore(util), _zscore(debt_ratio), _zscore(np.log(income))
     base_logit = (
-        0.60 * _zscore(util)
-        + 0.42 * _zscore(debt_ratio)
-        - 0.45 * _zscore(np.log(income))
-        - 0.30 * _zscore(age)
-        + 0.42 * past_due_total
-        + 0.55 * (past_due_total >= 2)                        # step effect (non-linear)
-        + 0.30 * (_zscore(util) * (debt_ratio > debt_ratio.mean()))  # interaction
+        0.74 * zutil
+        + 0.54 * zdebt
+        - 0.55 * zinc
+        - 0.35 * _zscore(age)
+        + 0.55 * past_due_total
+        + 0.55 * (past_due_total >= 2)                        # step (WoE-LR can mostly catch)
+        # Mean-zero product interactions: high util AND high debt compound risk.
+        # Being marginally ~zero they barely move single-feature IV, yet an
+        # additive WoE-LR cannot represent them -> the tree challenger's real edge.
+        + 0.85 * (zutil * zdebt)
+        + 0.55 * (zdebt * zinc)
     )
     intercept = _solve_intercept(base_logit, prevalence)      # pin base rate ~6.7%
     p = _sigmoid(base_logit + intercept)

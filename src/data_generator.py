@@ -77,13 +77,13 @@ def generate_base(n=150_000, seed=42, prevalence=0.067):
     # The step/interaction terms are what gives the tree challenger a real edge
     # over the linear champion (it captures them more fully).
     base_logit = (
-        1.05 * _zscore(util)
-        + 0.80 * _zscore(debt_ratio)
-        - 0.70 * _zscore(np.log(income))
-        - 0.45 * _zscore(age)
-        + 0.55 * past_due_total
-        + 0.9 * (past_due_total >= 2)                         # step effect (non-linear)
-        + 0.6 * (_zscore(util) * (debt_ratio > debt_ratio.mean()))  # interaction
+        0.60 * _zscore(util)
+        + 0.42 * _zscore(debt_ratio)
+        - 0.45 * _zscore(np.log(income))
+        - 0.30 * _zscore(age)
+        + 0.42 * past_due_total
+        + 0.55 * (past_due_total >= 2)                        # step effect (non-linear)
+        + 0.30 * (_zscore(util) * (debt_ratio > debt_ratio.mean()))  # interaction
     )
     intercept = _solve_intercept(base_logit, prevalence)      # pin base rate ~6.7%
     p = _sigmoid(base_logit + intercept)

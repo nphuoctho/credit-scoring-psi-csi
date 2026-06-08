@@ -82,12 +82,12 @@ def economic_impact(y, stats, avg_loss_per_default=5000, cost_per_decline=300):
 
 
 if __name__ == "__main__":
-    from src.data_generator import TARGET, assign_batches_and_drift, load_raw
+    from src.data_generator import TARGET, assign_batches, load_raw
     from src.prep import prep_apply, prep_fit
     from src.train import (score_challenger, score_champion, train_challenger,
                            train_champion)
     from src.woe import fit_woe, select_features
-    raw, _ = assign_batches_and_drift(load_raw())
+    raw = assign_batches(load_raw())             # clean eval window (no drift)
     params = prep_fit(raw[raw["batch"] <= 3])
     tr, te = prep_apply(raw[raw["batch"] <= 3], params), prep_apply(raw[raw["batch"] >= 4], params)
     feats = sum(select_features(fit_woe(tr, [c for c in tr.columns if c not in (TARGET, "batch")], TARGET)), [])

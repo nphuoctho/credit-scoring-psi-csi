@@ -72,10 +72,10 @@ def champion_coefficients(bundle):
 
 
 if __name__ == "__main__":
-    from src.data_generator import TARGET, assign_batches_and_drift, load_raw
+    from src.data_generator import TARGET, assign_batches, load_raw
     from src.prep import prep_apply, prep_fit
     from src.woe import fit_woe as _fw, select_features
-    raw, _ = assign_batches_and_drift(load_raw())
+    raw = assign_batches(load_raw())             # clean eval window (no drift)
     params = prep_fit(raw[raw["batch"] <= 3])
     tr = prep_apply(raw[raw["batch"] <= 3], params)
     te = prep_apply(raw[raw["batch"] >= 4], params)

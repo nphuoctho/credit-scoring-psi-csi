@@ -142,23 +142,40 @@ def load_raw():
     return generate_base()
 
 
-def assign_batches_and_drift(df, seed=42, n_batches=6):
-    """Shuffle into N equal 'monthly' batches, then inject a known drift.
-
-    Drift = covariate shift applied to ONE feature in the later batches AFTER
-    labels exist, so it is pure input drift the monitor must detect. A second
-    feature is left flat as a control (CSI on it must stay quiet).
-    """
-    rng = np.random.default_rng(seed)
+def assign_batches(df, seed=42, n_batches=6):
+    """Shuffle into N equal 'monthly' batches (no drift). batch 1-3 train, 4-6 test."""
     df = df.sample(frac=1, random_state=seed).reset_index(drop=True)
     df["batch"] = (np.arange(len(df)) * n_batches // len(df)) + 1
+    return df
 
-    drift = {"feature": "DebtRatio", "control": "age",
-             "factors": {4: 1.15, 5: 1.25, 6: 1.40}}
-    for b, f in drift["factors"].items():
-        mask = df["batch"] == b
-        df.loc[mask, drift["feature"]] = df.loc[mask, drift["feature"]] * f
-    return df, drift
+
+def drift_spec():
+    """Ground-truth covariate drift for the monitoring simulation.
+
+    Escalating multiplicative shift on ONE feature in the later batches (mild at
+    batch 4 -> monitor band, into the retrain band by 5-6); a second feature is
+    the untouched control. Kept SEPARATE from batch assignment so model
+    EVALUATION runs on a clean held-out window and only the MONITORING simulation
+    sees drift — quality and drift-robustness are never conflated.
+    """
+    return {"feature": "DebtRatio", "control": "age",
+            "factors": {4: 1.35, 5: 1.70, 6: 2.10}}
+
+
+def apply_drift(df, spec=None):
+    """Return a copy with the spec's drift applied to its affected batches."""
+    spec = spec or drift_spec()
+    out = df.copy()
+    for b, f in spec["factors"].items():
+        mask = out["batch"] == b
+        out.loc[mask, spec["feature"]] = out.loc[mask, spec["feature"]] * f
+    return out
+
+
+def assign_batches_and_drift(df, seed=42, n_batches=6):
+    """Convenience: batches + drift in one call (module self-tests / monitoring)."""
+    spec = drift_spec()
+    return apply_drift(assign_batches(df, seed, n_batches), spec), spec
 
 
 if __name__ == "__main__":

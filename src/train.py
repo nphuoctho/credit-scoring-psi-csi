@@ -21,10 +21,18 @@ from src.woe import apply_woe, fit_woe
 
 
 def train_champion(train, features, target, C=1.0):
-    """LR on WoE-transformed features; class_weight balances the ~6.7% minority."""
+    """LR on WoE-transformed features.
+
+    Deliberately NOT class-weighted: a scorecard's value is a calibrated PD
+    (predicted prob ≈ true default rate), and class re-weighting inflates the
+    probabilities. We absorb the ~6.7% imbalance at the decision threshold (a
+    fixed 5% FPR operating point) instead, which leaves discrimination ~unchanged
+    while keeping the champion honest as a probability. The challenger, by
+    contrast, is class-weighted then isotonic-calibrated.
+    """
     woe_model = fit_woe(train, features, target)
     X = apply_woe(train, woe_model)
-    lr = LogisticRegression(C=C, class_weight="balanced", max_iter=1000)
+    lr = LogisticRegression(C=C, max_iter=1000)
     lr.fit(X, train[target])
     return {"model": lr, "woe": woe_model, "features": features, "kind": "champion"}
 

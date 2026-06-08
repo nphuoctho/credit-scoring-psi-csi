@@ -64,9 +64,9 @@
   ],
   "evaluation": {
     "champion": {
-      "auc": 0.8119,
-      "ks": 0.489,
-      "gini": 0.6238
+      "auc": 0.8072,
+      "ks": 0.4787,
+      "gini": 0.6144
     },
     "challenger": {
       "auc": 0.8414,
@@ -74,8 +74,8 @@
       "gini": 0.6828
     },
     "champion_cv_auc": [
-      0.8122,
-      0.0094
+      0.8077,
+      0.0097
     ],
     "challenger_cv_auc": [
       0.8424,
@@ -85,57 +85,57 @@
   "champion_coefficients": [
     {
       "feature": "MonthlyIncome",
-      "coef": -1.95
-    },
-    {
-      "feature": "total_past_due",
-      "coef": -1.257
+      "coef": -1.761
     },
     {
       "feature": "age",
-      "coef": -1.21
+      "coef": -1.124
     },
     {
       "feature": "RevolvingUtilizationOfUnsecuredLines",
-      "coef": -0.939
+      "coef": -1.1
+    },
+    {
+      "feature": "total_past_due",
+      "coef": -1.053
     },
     {
       "feature": "monthly_debt",
-      "coef": -0.8
+      "coef": -0.834
     },
     {
       "feature": "DebtRatio",
-      "coef": -0.517
-    },
-    {
-      "feature": "income_per_dependent",
-      "coef": -0.41
+      "coef": -0.773
     },
     {
       "feature": "NumberOfTimes90DaysLate",
-      "coef": -0.151
+      "coef": -0.332
+    },
+    {
+      "feature": "income_per_dependent",
+      "coef": -0.257
     },
     {
       "feature": "NumberOfTime30-59DaysPastDueNotWorse",
-      "coef": -0.091
+      "coef": -0.252
     },
     {
       "feature": "has_been_late",
-      "coef": 0.019
+      "coef": 0.056
     }
   ],
   "decision": {
     "target_fpr": 0.05,
-    "champ_recall": 0.43024875621890546,
+    "champ_recall": 0.4551243781094527,
     "chall_recall": 0.5114427860696518,
-    "champ_threshold": 0.7595074157780483,
+    "champ_threshold": 0.20340141461347874,
     "chall_threshold": 0.7288609288741797,
-    "mean_diff": 0.08125532477585068,
-    "ci_low": 0.0687813794693588,
-    "ci_high": 0.09311655545401781,
+    "mean_diff": 0.056539580627642624,
+    "ci_low": 0.04526576935747585,
+    "ci_high": 0.06792681990354753,
     "verdict": "SHIP challenger",
-    "lift_pp": 8.12,
-    "ci_low_pp": 6.88,
+    "lift_pp": 5.63,
+    "ci_low_pp": 4.53,
     "min_lift_pp": 3.0,
     "material": true,
     "significant": true
@@ -143,38 +143,38 @@
   "economics": {
     "assumption_avg_loss": 5000,
     "assumption_cost_per_decline": 300,
-    "extra_defaulters_caught": 408,
-    "loss_avoided": 2040000,
+    "extra_defaulters_caught": 283,
+    "loss_avoided": 1415000,
     "fp_cost": 0,
-    "net_impact": 2040000,
+    "net_impact": 1415000,
     "note": "FP cost ~0 because both models are compared at an identical 5% FPR."
   },
   "monitoring": {
     "score_psi": [
       {
         "batch": 2,
-        "psi": 0.0009,
+        "psi": 0.001,
         "severity": "stable"
       },
       {
         "batch": 3,
-        "psi": 0.0008,
+        "psi": 0.0006,
         "severity": "stable"
       },
       {
         "batch": 4,
-        "psi": 0.0355,
+        "psi": 0.0457,
         "severity": "stable"
       },
       {
         "batch": 5,
-        "psi": 0.1216,
+        "psi": 0.153,
         "severity": "monitor"
       },
       {
         "batch": 6,
-        "psi": 0.2332,
-        "severity": "monitor"
+        "psi": 0.2899,
+        "severity": "shift"
       }
     ],
     "csi": {

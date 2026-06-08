@@ -1,0 +1,254 @@
+{
+  "data": {
+    "rows": 150000,
+    "base_rate": 0.0668,
+    "train_rows": 75000,
+    "test_rows": 75000
+  },
+  "iv_top": [
+    {
+      "feature": "RevolvingUtilizationOfUnsecuredLines",
+      "iv": 0.831,
+      "strength": "suspicious (>0.5 -> check leakage)"
+    },
+    {
+      "feature": "DebtRatio",
+      "iv": 0.4839,
+      "strength": "strong"
+    },
+    {
+      "feature": "monthly_debt",
+      "iv": 0.2494,
+      "strength": "medium"
+    },
+    {
+      "feature": "total_past_due",
+      "iv": 0.0837,
+      "strength": "weak"
+    },
+    {
+      "feature": "age",
+      "iv": 0.0687,
+      "strength": "weak"
+    },
+    {
+      "feature": "MonthlyIncome",
+      "iv": 0.063,
+      "strength": "weak"
+    },
+    {
+      "feature": "has_been_late",
+      "iv": 0.0568,
+      "strength": "weak"
+    },
+    {
+      "feature": "NumberOfTime30-59DaysPastDueNotWorse",
+      "iv": 0.0486,
+      "strength": "weak"
+    }
+  ],
+  "features_used": [
+    "age",
+    "NumberOfTime30-59DaysPastDueNotWorse",
+    "DebtRatio",
+    "MonthlyIncome",
+    "NumberOfTimes90DaysLate",
+    "total_past_due",
+    "has_been_late",
+    "monthly_debt",
+    "income_per_dependent",
+    "RevolvingUtilizationOfUnsecuredLines"
+  ],
+  "flagged_high_iv": [
+    "RevolvingUtilizationOfUnsecuredLines"
+  ],
+  "evaluation": {
+    "champion": {
+      "auc": 0.8119,
+      "ks": 0.489,
+      "gini": 0.6238
+    },
+    "challenger": {
+      "auc": 0.8414,
+      "ks": 0.5326,
+      "gini": 0.6828
+    },
+    "champion_cv_auc": [
+      0.8122,
+      0.0094
+    ],
+    "challenger_cv_auc": [
+      0.8424,
+      0.0074
+    ]
+  },
+  "champion_coefficients": [
+    {
+      "feature": "MonthlyIncome",
+      "coef": -1.95
+    },
+    {
+      "feature": "total_past_due",
+      "coef": -1.257
+    },
+    {
+      "feature": "age",
+      "coef": -1.21
+    },
+    {
+      "feature": "RevolvingUtilizationOfUnsecuredLines",
+      "coef": -0.939
+    },
+    {
+      "feature": "monthly_debt",
+      "coef": -0.8
+    },
+    {
+      "feature": "DebtRatio",
+      "coef": -0.517
+    },
+    {
+      "feature": "income_per_dependent",
+      "coef": -0.41
+    },
+    {
+      "feature": "NumberOfTimes90DaysLate",
+      "coef": -0.151
+    },
+    {
+      "feature": "NumberOfTime30-59DaysPastDueNotWorse",
+      "coef": -0.091
+    },
+    {
+      "feature": "has_been_late",
+      "coef": 0.019
+    }
+  ],
+  "decision": {
+    "target_fpr": 0.05,
+    "champ_recall": 0.43024875621890546,
+    "chall_recall": 0.5114427860696518,
+    "champ_threshold": 0.7595074157780483,
+    "chall_threshold": 0.7288609288741797,
+    "mean_diff": 0.08125532477585068,
+    "ci_low": 0.0687813794693588,
+    "ci_high": 0.09311655545401781,
+    "verdict": "SHIP challenger",
+    "lift_pp": 8.12,
+    "ci_low_pp": 6.88,
+    "min_lift_pp": 3.0,
+    "material": true,
+    "significant": true
+  },
+  "economics": {
+    "assumption_avg_loss": 5000,
+    "assumption_cost_per_decline": 300,
+    "extra_defaulters_caught": 408,
+    "loss_avoided": 2040000,
+    "fp_cost": 0,
+    "net_impact": 2040000,
+    "note": "FP cost ~0 because both models are compared at an identical 5% FPR."
+  },
+  "monitoring": {
+    "score_psi": [
+      {
+        "batch": 2,
+        "psi": 0.0009,
+        "severity": "stable"
+      },
+      {
+        "batch": 3,
+        "psi": 0.0008,
+        "severity": "stable"
+      },
+      {
+        "batch": 4,
+        "psi": 0.0355,
+        "severity": "stable"
+      },
+      {
+        "batch": 5,
+        "psi": 0.1216,
+        "severity": "monitor"
+      },
+      {
+        "batch": 6,
+        "psi": 0.2332,
+        "severity": "monitor"
+      }
+    ],
+    "csi": {
+      "RevolvingUtilizationOfUnsecuredLines": {
+        "batch2": 0.0002,
+        "batch3": 0.001,
+        "batch4": 0.0016,
+        "batch5": 0.0006,
+        "batch6": 0.0007
+      },
+      "DebtRatio": {
+        "batch2": 0.0003,
+        "batch3": 0.0003,
+        "batch4": 0.1275,
+        "batch5": 0.3816,
+        "batch6": 0.6952
+      },
+      "MonthlyIncome": {
+        "batch2": 0.0,
+        "batch3": 0.0,
+        "batch4": 0.0001,
+        "batch5": 0.0,
+        "batch6": 0.0
+      },
+      "age": {
+        "batch2": 0.0011,
+        "batch3": 0.0008,
+        "batch4": 0.0015,
+        "batch5": 0.0011,
+        "batch6": 0.001
+      },
+      "NumberOfOpenCreditLinesAndLoans": {
+        "batch2": 0.0004,
+        "batch3": 0.0002,
+        "batch4": 0.0006,
+        "batch5": 0.0005,
+        "batch6": 0.0002
+      }
+    },
+    "drift_table": [
+      {
+        "feature": "DebtRatio",
+        "batch": "batch6",
+        "csi": 0.6952,
+        "severity": "shift",
+        "action": "retrain"
+      },
+      {
+        "feature": "DebtRatio",
+        "batch": "batch5",
+        "csi": 0.3816,
+        "severity": "shift",
+        "action": "retrain"
+      },
+      {
+        "feature": "DebtRatio",
+        "batch": "batch4",
+        "csi": 0.1275,
+        "severity": "monitor",
+        "action": "investigate"
+      }
+    ],
+    "verification": {
+      "injected_feature": "DebtRatio",
+      "injected_batches": [
+        4,
+        5,
+        6
+      ],
+      "caught_injected_drift": true,
+      "escalating_trend": true,
+      "control_feature": "age",
+      "control_stayed_stable": true,
+      "passed": true
+    }
+  }
+}

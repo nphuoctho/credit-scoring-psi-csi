@@ -33,15 +33,21 @@ def score_champion(bundle, df):
     return bundle["model"].predict_proba(apply_woe(df, bundle["woe"]))[:, 1]
 
 
+def new_challenger(scale_pos_weight=1.0):
+    """Unfitted LightGBM with the standard challenger params (one source of truth
+    so calibration CV reuses identical settings)."""
+    return LGBMClassifier(
+        n_estimators=300, learning_rate=0.05, num_leaves=31,
+        min_child_samples=100, subsample=0.9, colsample_bytree=0.9,
+        scale_pos_weight=scale_pos_weight, random_state=42, verbose=-1,
+    )
+
+
 def train_challenger(train, features, target):
     """LightGBM on raw features; scale_pos_weight handles the imbalance."""
     n_bad = int(train[target].sum())
     n_good = len(train) - n_bad
-    gbm = LGBMClassifier(
-        n_estimators=300, learning_rate=0.05, num_leaves=31,
-        min_child_samples=100, subsample=0.9, colsample_bytree=0.9,
-        scale_pos_weight=n_good / max(n_bad, 1), random_state=42, verbose=-1,
-    )
+    gbm = new_challenger(scale_pos_weight=n_good / max(n_bad, 1))
     gbm.fit(train[features], train[target])
     return {"model": gbm, "features": features, "kind": "challenger"}
 

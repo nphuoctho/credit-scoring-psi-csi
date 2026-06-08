@@ -1,0 +1,12 @@
+# Project 03 — Credit Scoring + PSI/CSI + Champion-Challenger
+# Python 3.11+ recommended. Install: pip install -r requirements.txt
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+lightgbm>=4.0
+matplotlib>=3.7
+seaborn>=0.12
+jupyter>=1.0
+joblib>=1.3
+# Optional (Phase 9 demo):
+# streamlit>=1.30

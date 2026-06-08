@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ckenv/
+.uv/
+.ipynb_checkpoints/
+
+# Data — DO NOT commit (Kaggle ToS). See data/README.md to download.
+data/*.csv
+
+# OS
+.DS_Store
+
+# Never commit credentials
+*.key
+*service-account*.json

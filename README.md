@@ -66,7 +66,3 @@ The data is synthetic, a deliberate trade: there is no public dataset I can redi
 ## Stack
 
 Python with pandas, scikit-learn, and LightGBM for the models, matplotlib and seaborn for charts, Streamlit for the demo.
-
-## Tóm tắt (VN)
-
-Dự án mô phỏng trọn vòng đời một scorecard tín dụng: huấn luyện hai mô hình, quyết định mô hình nào lên production bằng khung champion-challenger với bootstrap CI tại ngưỡng FPR 5%, rồi giám sát drift sau triển khai bằng PSI/CSI. Các công thức lõi (WoE/IV, KS, PSI/CSI, bootstrap) đều tự code. Challenger bắt thêm 5,6 điểm phần trăm khách vỡ nợ ở cùng mức từ chối nên được đề xuất ship; lớp monitoring bắt đúng drift đã chủ động tiêm vào DebtRatio.

@@ -1,4 +1,4 @@
-"""Chart helpers — every figure the README embeds and the notebook renders.
+"""Chart helpers. Every figure the README embeds and the notebook renders.
 
 Pure plotting: callers pass already-computed numbers, these just draw and save a
 PNG. Headless Agg backend so it runs in CI / a notebook execute step.
@@ -30,7 +30,7 @@ def plot_roc(y, scores, path):
     ax.plot([0, 1], [0, 1], "--", color="grey", lw=1)
     ax.axvline(0.05, color="crimson", lw=1, ls=":", label="5% FPR operating point")
     ax.set(xlabel="False positive rate", ylabel="True positive rate (recall)",
-           title="ROC — champion vs challenger")
+           title="ROC: champion vs challenger")
     ax.legend(loc="lower right", fontsize=9)
     _save(fig, path)
 
@@ -41,7 +41,7 @@ def plot_lift(lift_df, path, label="challenger"):
     ax.bar(lift_df.index.astype(str), lift_df["lift"], color="#3b6fb6")
     ax.axhline(1.0, color="grey", ls="--", lw=1, label="population base rate")
     ax.set(xlabel="score decile (9 = riskiest)", ylabel="lift vs base rate",
-           title=f"Decile lift — {label}")
+           title=f"Decile lift ({label})")
     ax.legend()
     _save(fig, path)
 
@@ -63,8 +63,8 @@ def plot_psi_trend(psi_score_df, path):
     """Score PSI across monitoring batches with the 0.1 / 0.25 action lines."""
     fig, ax = plt.subplots(figsize=(6, 4))
     ax.plot(psi_score_df["batch"], psi_score_df["psi"], "o-", color="#b6413b", lw=2)
-    ax.axhline(0.10, color="orange", ls="--", lw=1, label="0.10 — monitor")
-    ax.axhline(0.25, color="red", ls="--", lw=1, label="0.25 — retrain")
+    ax.axhline(0.10, color="orange", ls="--", lw=1, label="0.10 monitor")
+    ax.axhline(0.25, color="red", ls="--", lw=1, label="0.25 retrain")
     ax.set(xlabel="batch (simulated month)", ylabel="score PSI vs baseline",
            title="Score PSI trend (population stability)")
     ax.legend()
@@ -87,7 +87,7 @@ def plot_iv(iv_df, path, top=10):
     colors = ["#c0392b" if s.startswith("suspicious") else "#3b6fb6"
               for s in d["strength"]]
     ax.barh(d["feature"], d["iv"], color=colors)
-    ax.axvline(0.5, color="crimson", ls=":", lw=1, label="0.5 — leakage check")
+    ax.axvline(0.5, color="crimson", ls=":", lw=1, label="0.5 leakage check")
     ax.set(xlabel="Information Value", title="Feature IV (red = IV>0.5, investigate)")
     ax.legend()
     _save(fig, path)
